@@ -235,6 +235,12 @@ if __name__ == "__main__":
     else:
         print("Привет, Мир!")
 
+svsdfdsf
+
+dsf
+sd
+fsd
+f
 
 
 
