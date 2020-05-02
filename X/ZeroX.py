@@ -8,24 +8,8 @@
 '''
 import numpy as np
 
-def condition_func(matrix, n):
-
-    for j in range(1, n + 1):
-        if all(matrix[0][i][i] == 'X' for i in range(1, n + 1)) \
-                or all(matrix[0][i][j] == 'X' for i in range(1, n + 1)) \
-                or all(matrix[0][j][i] == 'X' for i in range(1, n + 1)) \
-                or all(matrix[0][i][n + 1 - i] == 'X' for i in range(1, n + 1)):
-            if_exit = "-----------Победа игрока X-er-----------"
-
-        elif all(matrix[0][i][i] == 'O' for i in range(1, n + 1)) \
-                or all(matrix[0][i][j] == 'O' for i in range(1, n + 1)) \
-                or all(matrix[0][j][i] == 'O' for i in range(1, n + 1)) \
-                or all(matrix[0][i][n + 1 - i] == 'O' for i in range(1, n + 1)):
-            if_exit = "-----------Победа игрока O-er ----------"
-        else:
-            pass
-
-def ZeroX_Field(condition_func, n=3):
+# Создание игрового поля
+def ZeroX_Field(n):
     matrix = np.zeros((1, n + 1, n + 1), dtype=str)
     for i in range(0, n + 1, 1):
         matrix[0][i][0] = i
@@ -35,24 +19,48 @@ def ZeroX_Field(condition_func, n=3):
         for j in range(1, n + 1):
             matrix[0][i][j] = '_'
     print(matrix, end='\n')
+    return matrix
 
-    counter = 0
+simbol = ""
+# Условие победы
+def condition_func(matrix, n):
+    if_exit = ""
+    for j in range(1, n + 1):
+        if all(matrix[0][i][i] == simbol for i in range(1, n + 1)) \
+                or all(matrix[0][i][j] == simbol for i in range(1, n + 1)) \
+                or all(matrix[0][j][i] == simbol for i in range(1, n + 1)) \
+                or all(matrix[0][i][n + 1 - i] == simbol for i in range(1, n + 1)):
+            if_exit = f"-----------Победа игрока {simbol}-er-----------"
+            print(if_exit)
+            return if_exit
 
-    while True:
-        if counter % 2 == 0:
-            simbol = 'X'
-        elif counter % 2 != 0:
-            simbol = 'O'
-        print(f"Ход игрока {simbol}-er")
-        s = input(f"Введите номер строки от 1 до {n}: ")
-        d = input(f"Введите номер столбцаот 1 до {n}: ")
-        matrix[0, int(s), int(d)] = simbol
-        print(matrix, end='\n')
-        counter += 1
-        condition_func(matrix, n)
-        if counter >= n ** 2:
-            print("------------Ничья-----------")
-        if condition_func:
-            break
+n = 3       # Величина игрового поля (n x n)
+matrix = ZeroX_Field(n)
+if_exit = condition_func(matrix, n)
+# print(if_exit)
+counter = 0
 
-ZeroX_Field(condition_func)
+while True:
+    condition_func(matrix, n)
+    if if_exit == "-----------Победа игрока X-er-----------":
+        break
+    elif counter >= n ** 2:
+        print("------------Ничья-----------")
+        break
+
+    if counter % 2 == 0:
+        simbol = 'X'
+    elif counter % 2 != 0:
+        simbol = 'O'
+    print(f"Ход игрока {simbol}-er")
+    s = input(f"Введите номер строки от 1 до {n}: ")
+    d = input(f"Введите номер столбцаот 1 до {n}: ")
+    matrix[0, int(s), int(d)] = simbol
+    print(matrix, end='\n')
+    counter += 1
+
+    # print(if_exit)
+
+
+
+# print(if_exit)
