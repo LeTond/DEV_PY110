@@ -28,16 +28,13 @@ def ZeroX_Field(n):
 
 # Условие победы
 def condition_func(matrix, n):
-    if_exit = ""
     for j in range(1, n + 1):
         if all(matrix[0][i][i] == simbol for i in range(1, n + 1)) \
                 or all(matrix[0][i][j] == simbol for i in range(1, n + 1)) \
                 or all(matrix[0][j][i] == simbol for i in range(1, n + 1)) \
                 or all(matrix[0][i][n + 1 - i] == simbol for i in range(1, n + 1)):
-            if_exit = f"-----------Победа игрока {simbol}-er-----------"
-            print(if_exit)
             status = "over"
-            return if_exit
+            return status
 
 # Обработка ошибок при введении координат поля
 def digit_exeption(s, d, matrix):
@@ -56,7 +53,7 @@ def digit_exeption(s, d, matrix):
         matrix[0, int(s), int(d)] = simbol
 
 matrix = ZeroX_Field(n)
-# if_exit = condition_func(matrix, n)
+if_exit = condition_func(matrix, n)
 
 # Тело игры
 while status == "game":
@@ -64,8 +61,8 @@ while status == "game":
         simbol = 'X'
     elif counter % 2 != 0:
         simbol = 'O'
-    print(f"Ход игрока {simbol}-er")
-    s = input(f"Введите номер строки от 1 до {n}: ")
+
+    s = input(f"Ход игрока {simbol}-er \nВведите номер строки от 1 до {n}: ")
     d = input(f"Введите номер столбцаот 1 до {n}: ")
 
     digit_exeption(s, d, matrix)    # Проверка корректности хода
@@ -75,8 +72,10 @@ while status == "game":
     if counter >= n:
         condition_func(matrix, n)       # Проверка победного состояния
 
-    if condition_func == f"-----------Победа игрока {simbol}-er-----------":
+    if condition_func(matrix, n) == 'over':
+        print(f"-----------Победа игрока {simbol}-er-----------")
         break
     elif counter >= n ** 2:
         print("------------Ничья-----------")
         break
+
