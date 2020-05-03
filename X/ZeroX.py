@@ -15,31 +15,26 @@ status = "game"
 
 # Создание игрового поля
 def ZeroX_Field(n):
-    matrix = np.zeros((1, n + 1, n + 1), dtype=str)
-    for i in range(0, n + 1, 1):
-        matrix[0][i][0] = i
-    for j in range(0, n + 1, 1):
-        matrix[0][0][j] = j
-    for i in range(1, n + 1, 1):
-        for j in range(1, n + 1):
-            matrix[0][i][j] = '_'
+    matrix = np.full((n + 1, n + 1), '_', dtype=str)
+    matrix[:, 0] = range(0, n+1)
+    matrix[0, :] = range(0, n+1)
     print(matrix, end='\n')
     return matrix
 
 # Условие победы
 def condition_func(matrix, n):
     for j in range(1, n + 1):
-        if all(matrix[0][i][i] == simbol for i in range(1, n + 1)) \
-                or all(matrix[0][i][j] == simbol for i in range(1, n + 1)) \
-                or all(matrix[0][j][i] == simbol for i in range(1, n + 1)) \
-                or all(matrix[0][i][n + 1 - i] == simbol for i in range(1, n + 1)):
+        if all(matrix[i][i] == simbol for i in range(1, n + 1)) \
+                or all(matrix[i][j] == simbol for i in range(1, n + 1)) \
+                or all(matrix[j][i] == simbol for i in range(1, n + 1)) \
+                or all(matrix[i][n + 1 - i] == simbol for i in range(1, n + 1)):
             status = "over"
             return status
 
 # Обработка ошибок при введении координат поля
 def digit_exeption(s, d, matrix):
     try:
-        if matrix[0][int(s)][int(d)] == 'X' or matrix[0][int(s)][int(d)] == 'O':
+        if matrix[int(s)][int(d)] == 'X' or matrix[int(s)][int(d)] == 'O':
             print("*****Это поле уже занято, введите координаты другого поля: ")
             s = input(f"Введите номер строки от 1 до {n}: ")
             d = input(f"Введите номер столбцаот 1 до {n}: ")
@@ -50,7 +45,7 @@ def digit_exeption(s, d, matrix):
         d = input(f"Введите номер столбцаот 1 до {n}: ")
         return digit_exeption(s, d, matrix)
     else:
-        matrix[0, int(s), int(d)] = simbol
+        matrix[int(s), int(d)] = simbol
 
 matrix = ZeroX_Field(n)
 if_exit = condition_func(matrix, n)
