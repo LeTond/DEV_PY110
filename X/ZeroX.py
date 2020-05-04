@@ -15,40 +15,40 @@ status = "game"
 
 # Создание игрового поля
 def ZeroX_Field(n):
-    matrix = np.full((n + 1, n + 1), '_', dtype=str)
-    matrix[:, 0] = range(0, n+1)
-    matrix[0, :] = range(0, n+1)
+    matrix = np.full((n, n), '_', dtype=str)
+    matrix[:, 0] = range(0, n)
+    matrix[0, :] = range(0, n)
     print(matrix, end='\n')
     return matrix
 
 # Условие победы
-def condition_func(matrix, n):
-    for j in range(1, n + 1):
-        if all(matrix[i][i] == simbol for i in range(1, n + 1)) \
-                or all(matrix[i][j] == simbol for i in range(1, n + 1)) \
-                or all(matrix[j][i] == simbol for i in range(1, n + 1)) \
-                or all(matrix[i][n + 1 - i] == simbol for i in range(1, n + 1)):
-            status = "over"
-            return status
 
+# TODO: убрать for, реализовать проверку через np
+def condition_func(matrix, n, simbol):
+    matrix2 = np.full((n, 1), simbol, dtype=str)
+    if (np.diagonal(matrix) == matrix2).all() \
+            or (matrix.ndarray.all(axis=0) == matrix2).all():
+        status = 'over'
+        return status
+
+# TODO: убрать рекурсию (while?)
 # Обработка ошибок при введении координат поля
 def digit_exeption(s, d, matrix):
     try:
         if matrix[int(s)][int(d)] == 'X' or matrix[int(s)][int(d)] == 'O':
             print("*****Это поле уже занято, введите координаты другого поля: ")
-            s = input(f"Введите номер строки от 1 до {n}: ")
-            d = input(f"Введите номер столбцаот 1 до {n}: ")
+            s = input(f"Введите номер строки от 0 до {n-1}: ")
+            d = input(f"Введите номер столбцаот 0 до {n-1}: ")
             return digit_exeption(s, d, matrix)
     except:
         print("*****Вы ввели некорректные числа, введите правильные: ")
-        s = input(f"Введите номер строки от 1 до {n}: ")
-        d = input(f"Введите номер столбцаот 1 до {n}: ")
+        s = input(f"Введите номер строки от 0 до {n-1}: ")
+        d = input(f"Введите номер столбцаот 0 до {n-1}: ")
         return digit_exeption(s, d, matrix)
     else:
         matrix[int(s), int(d)] = simbol
 
 matrix = ZeroX_Field(n)
-if_exit = condition_func(matrix, n)
 
 # Тело игры
 while status == "game":
@@ -57,17 +57,17 @@ while status == "game":
     elif counter % 2 != 0:
         simbol = 'O'
 
-    s = input(f"Ход игрока {simbol}-er \nВведите номер строки от 1 до {n}: ")
-    d = input(f"Введите номер столбцаот 1 до {n}: ")
+    s = input(f"Ход игрока {simbol}-er \nВведите номер строки от 0 до {n-1}: ")
+    d = input(f"Введите номер столбцаот 0 до {n-1}: ")
 
     digit_exeption(s, d, matrix)    # Проверка корректности хода
 
     print(matrix, end='\n')
     counter += 1
     if counter >= n:
-        condition_func(matrix, n)       # Проверка победного состояния
+        condition_func(matrix, n, simbol)       # Проверка победного состояния
 
-    if condition_func(matrix, n) == 'over':
+    if condition_func(matrix, n, simbol) == 'over':
         print(f"-----------Победа игрока {simbol}-er-----------")
         break
     elif counter >= n ** 2:
