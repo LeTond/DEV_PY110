@@ -22,32 +22,30 @@ def ZeroX_Field(n):
     return matrix
 
 # Условие победы
-
 # TODO: убрать for, реализовать проверку через np
 def condition_func(matrix, n, simbol):
     matrix2 = np.full((n, 1), simbol, dtype=str)
-    if (np.diagonal(matrix) == matrix2).all() \
-            or (matrix.ndarray.all(axis=0) == matrix2).all():
+    if (np.diagonal(matrix) == matrix2).all():
+            # or matrix.ndarray.all(axis=0) == matrix2:
         status = 'over'
         return status
 
-# TODO: убрать рекурсию (while?)
 # Обработка ошибок при введении координат поля
 def digit_exeption(s, d, matrix):
-    try:
-        if matrix[int(s)][int(d)] == 'X' or matrix[int(s)][int(d)] == 'O':
-            print("*****Это поле уже занято, введите координаты другого поля: ")
+    while True:
+        try:
+            while matrix[int(s)][int(d)] == 'X' \
+                    or matrix[int(s)][int(d)] == 'O':
+                print("*****Это поле уже занято, введите координаты другого поля: ")
+                s = input(f"Введите номер строки от 0 до {n-1}: ")
+                d = input(f"Введите номер столбцаот 0 до {n-1}: ")
+        except:
+            print("*****Вы ввели некорректные координаты*****")
             s = input(f"Введите номер строки от 0 до {n-1}: ")
             d = input(f"Введите номер столбцаот 0 до {n-1}: ")
-            return digit_exeption(s, d, matrix)
-    except:
-        print("*****Вы ввели некорректные числа, введите правильные: ")
-        s = input(f"Введите номер строки от 0 до {n-1}: ")
-        d = input(f"Введите номер столбцаот 0 до {n-1}: ")
-        return digit_exeption(s, d, matrix)
-    else:
-        matrix[int(s), int(d)] = simbol
-
+        else:
+            matrix[int(s), int(d)] = simbol
+            break
 matrix = ZeroX_Field(n)
 
 # Тело игры
