@@ -25,8 +25,9 @@ def ZeroX_Field(n):
 # TODO: убрать for, реализовать проверку через np
 def condition_func(matrix, n, simbol):
     matrix2 = np.full((n, 1), simbol, dtype=str)
-    if (np.diagonal(matrix) == matrix2).all():
-            # or matrix.ndarray.all(axis=0) == matrix2:
+    if (np.diagonal(matrix) == matrix2).all() \
+            or (np.diagonal(np.rot90(matrix)) == matrix2).all():
+            # or (matrix.any(axis=0) == matrix2).all():
         status = 'over'
         return status
 
@@ -37,8 +38,8 @@ def digit_exeption(s, d, matrix):
             while matrix[int(s)][int(d)] == 'X' \
                     or matrix[int(s)][int(d)] == 'O':
                 print("*****Это поле уже занято, введите координаты другого поля: ")
-                s = input(f"Введите номер строки от 0 до {n-1}: ")
-                d = input(f"Введите номер столбцаот 0 до {n-1}: ")
+                s = input(f"Введите номер строки от 0 до {n - 1}: ")
+                d = input(f"Введите номер столбцаот 0 до {n - 1}: ")
         except:
             print("*****Вы ввели некорректные координаты*****")
             s = input(f"Введите номер строки от 0 до {n-1}: ")
