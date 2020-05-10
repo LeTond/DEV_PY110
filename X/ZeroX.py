@@ -23,11 +23,11 @@ def ZeroX_Field(n):
 
 # Условие победы
 # TODO: убрать for, реализовать проверку через np
-def condition_func(matrix, n, simbol):
-    matrix2 = np.full((n, 1), simbol, dtype=str)
-    if (np.diagonal(matrix) == matrix2).all() \
-            or (np.diagonal(np.rot90(matrix)) == matrix2).all():
-            # or (matrix.any(axis=0) == matrix2).all():
+def condition_func(matrix, simbol):
+    if ((np.diagonal(matrix) == simbol).all()).any() \
+            or ((np.diagonal(np.rot90(matrix)) == simbol).all()).any() \
+            or (matrix == simbol).all(axis=0).any() \
+            or (matrix == simbol).all(axis=1).any():
         status = 'over'
         return status
 
@@ -38,8 +38,8 @@ def digit_exeption(s, d, matrix):
             while matrix[int(s)][int(d)] == 'X' \
                     or matrix[int(s)][int(d)] == 'O':
                 print("*****Это поле уже занято, введите координаты другого поля: ")
-                s = input(f"Введите номер строки от 0 до {n - 1}: ")
-                d = input(f"Введите номер столбцаот 0 до {n - 1}: ")
+                s = input(f"Введите номер строки от 0 до {n-1}: ")
+                d = input(f"Введите номер столбцаот 0 до {n-1}: ")
         except:
             print("*****Вы ввели некорректные координаты*****")
             s = input(f"Введите номер строки от 0 до {n-1}: ")
@@ -64,9 +64,9 @@ while status == "game":
     print(matrix, end='\n')
     counter += 1
     if counter >= n:
-        condition_func(matrix, n, simbol)       # Проверка победного состояния
+        condition_func(matrix, simbol)       # Проверка победного состояния
 
-    if condition_func(matrix, n, simbol) == 'over':
+    if condition_func(matrix, simbol) == 'over':
         print(f"-----------Победа игрока {simbol}-er-----------")
         break
     elif counter >= n ** 2:
